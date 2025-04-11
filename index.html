@@ -2,104 +2,71 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Acordeón Web Audio</title>
+  <title>Teclado de Prueba (Web Audio API)</title>
   <style>
     body {
-      font-family: sans-serif;
       background: #111;
       color: white;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-top: 40px;
+      font-family: sans-serif;
+      text-align: center;
+      margin-top: 50px;
     }
-    .teclas {
-      display: grid;
-      grid-template-columns: repeat(3, 80px);
-      gap: 15px;
-    }
-    .tecla {
-      background: #333;
-      color: white;
+    button {
+      font-size: 24px;
       padding: 20px;
-      border-radius: 10px;
-      font-size: 20px;
+      margin: 20px;
       border: none;
+      border-radius: 10px;
+      background: #444;
+      color: white;
       cursor: pointer;
+      transition: background 0.2s;
     }
-    .tecla.activa {
-      background: #28a745;
+    button:hover {
+      background: #666;
     }
   </style>
 </head>
 <body>
-  <h1>Acordeón Web Audio (A, S, D)</h1>
-  <div class="teclas">
-    <button class="tecla" data-tecla="a">A</button>
-    <button class="tecla" data-tecla="s">S</button>
-    <button class="tecla" data-tecla="d">D</button>
-  </div>
+
+  <h1>Mini Teclado</h1>
+  <p>Presioná una nota:</p>
+
+  <button onclick="playNote('C3')">C3</button>
+  <button onclick="playNote('D3')">D3</button>
+  <button onclick="playNote('E3')">E3</button>
 
   <script>
     const audioContext = new (window.AudioContext || window.webkitAudioContext)();
     const sonidos = {};
-    const tocando = {};
 
-    const archivos = {
-      a: "sonidos/C3.ogg",   // preferiblemente .ogg o .wav sin silencios
-      s: "sonidos/D3.ogg",
-      d: "sonidos/mi.ogg"
-    };
+const notas = {
+  C3: 'sonidos/C3.wav',
+  D3: 'sonidos/D3.wav',
+  E3: 'sonidos/E3.wav',
+};
 
-    async function cargarSonido(tecla) {
-      const response = await fetch(archivos[tecla]);
-      const arrayBuffer = await response.arrayBuffer();
-      sonidos[tecla] = await audioContext.decodeAudioData(arrayBuffer);
+    // Precarga de sonidos
+    async function cargarSonidos() {
+      for (const [nota, url] of Object.entries(notas)) {
+        const response = await fetch(url);
+        const arrayBuffer = await response.arrayBuffer();
+        sonidos[nota] = await audioContext.decodeAudioData(arrayBuffer);
+      }
+      console.log("✅ Sonidos cargados.");
     }
 
-    async function tocar(tecla) {
-      if (!sonidos[tecla] || tocando[tecla]) return;
-
+    function playNote(nota) {
       const source = audioContext.createBufferSource();
-      source.buffer = sonidos[tecla];
-      source.loop = true;
+      source.buffer = sonidos[nota];
       source.connect(audioContext.destination);
-      source.start(0);
-      tocando[tecla] = source;
-
-      document.querySelector(`[data-tecla="${tecla}"]`)?.classList.add("activa");
+      source.start();
     }
 
-    function detener(tecla) {
-      if (!tocando[tecla]) return;
-      tocando[tecla].stop();
-      delete tocando[tecla];
-
-      document.querySelector(`[data-tecla="${tecla}"]`)?.classList.remove("activa");
-    }
-
-    // Cargar todos los sonidos
-    window.addEventListener("load", async () => {
-      await Promise.all(Object.keys(archivos).map(tecla => cargarSonido(tecla)));
-    });
-
-    // Teclado físico
-    document.addEventListener("keydown", (e) => {
-      const tecla = e.key.toLowerCase();
-      tocar(tecla);
-    });
-
-    document.addEventListener("keyup", (e) => {
-      const tecla = e.key.toLowerCase();
-      detener(tecla);
-    });
-
-    // Click en botones
-    document.querySelectorAll(".tecla").forEach(btn => {
-      btn.addEventListener("mousedown", () => tocar(btn.dataset.tecla));
-      btn.addEventListener("mouseup", () => detener(btn.dataset.tecla));
-      btn.addEventListener("mouseleave", () => detener(btn.dataset.tecla));
-    });
+    // Iniciar la carga al abrir la página
+    cargarSonidos();
   </script>
+
 </body>
 </html>
+
