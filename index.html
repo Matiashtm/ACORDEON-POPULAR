@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Acordeón Web Audio</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background: #111;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 40px;
+    }
+    .teclas {
+      display: grid;
+      grid-template-columns: repeat(3, 80px);
+      gap: 15px;
+    }
+    .tecla {
+      background: #333;
+      color: white;
+      padding: 20px;
+      border-radius: 10px;
+      font-size: 20px;
+      border: none;
+      cursor: pointer;
+    }
+    .tecla.activa {
+      background: #28a745;
+    }
+  </style>
+</head>
+<body>
+  <h1>Acordeón Web Audio (A, S, D)</h1>
+  <div class="teclas">
+    <button class="tecla" data-tecla="a">A</button>
+    <button class="tecla" data-tecla="s">S</button>
+    <button class="tecla" data-tecla="d">D</button>
+  </div>
+
+  <script>
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const sonidos = {};
+    const tocando = {};
+
+    const archivos = {
+      a: "sonidos/do.ogg",   // preferiblemente .ogg o .wav sin silencios
+      s: "sonidos/re.ogg",
+      d: "sonidos/mi.ogg"
+    };
+
+    async function cargarSonido(tecla) {
+      const response = await fetch(archivos[tecla]);
+      const arrayBuffer = await response.arrayBuffer();
+      sonidos[tecla] = await audioContext.decodeAudioData(arrayBuffer);
+    }
+
+    async function tocar(tecla) {
+      if (!sonidos[tecla] || tocando[tecla]) return;
+
+      const source = audioContext.createBufferSource();
+      source.buffer = sonidos[tecla];
+      source.loop = true;
+      source.connect(audioContext.destination);
+      source.start(0);
+      tocando[tecla] = source;
+
+      document.querySelector(`[data-tecla="${tecla}"]`)?.classList.add("activa");
+    }
+
+    function detener(tecla) {
+      if (!tocando[tecla]) return;
+      tocando[tecla].stop();
+      delete tocando[tecla];
+
+      document.querySelector(`[data-tecla="${tecla}"]`)?.classList.remove("activa");
+    }
+
+    // Cargar todos los sonidos
+    window.addEventListener("load", async () => {
+      await Promise.all(Object.keys(archivos).map(tecla => cargarSonido(tecla)));
+    });
+
+    // Teclado físico
+    document.addEventListener("keydown", (e) => {
+      const tecla = e.key.toLowerCase();
+      tocar(tecla);
+    });
+
+    document.addEventListener("keyup", (e) => {
+      const tecla = e.key.toLowerCase();
+      detener(tecla);
+    });
+
+    // Click en botones
+    document.querySelectorAll(".tecla").forEach(btn => {
+      btn.addEventListener("mousedown", () => tocar(btn.dataset.tecla));
+      btn.addEventListener("mouseup", () => detener(btn.dataset.tecla));
+      btn.addEventListener("mouseleave", () => detener(btn.dataset.tecla));
+    });
+  </script>
+</body>
+</html>
