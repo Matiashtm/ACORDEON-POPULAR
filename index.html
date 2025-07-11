@@ -418,7 +418,7 @@ function playNote(key) {
   const filterFreq = getFilter();
   const delayTime = getDelay();
   const distortionAmount = getDistortion();
-  const harmonicsCount = parseInt(getHarmonics()); // << MODIFICADO
+  const harmonicsCount = getHarmonics(); // número de osciladores
   const now = ctx.currentTime;
 
   const noteGain = ctx.createGain();
@@ -445,59 +445,50 @@ function playNote(key) {
   delay.connect(ctx.destination);
   filter.connect(ctx.destination);
 
-const unisonOscs = [];
-const detuneAmounts = [-10, -5, 0, 5, 10]; // en cents (puede ajustar a gusto)
+  // Crear osciladores con desafinación (unison effect)
+  const unisonOscs = [];
+  const detuneStep = 5; // en cents
+  const detuneOffsets = [];
 
-for (let i = 0; i < detuneAmounts.length; i++) {
-  const osc = createOsc(freq);
-  const oscGain = ctx.createGain();
-  osc.detune.value = detuneAmounts[i];
-  oscGain.gain.setValueAtTime(1 / detuneAmounts.length, now); // volumen compensado
-  osc.connect(oscGain).connect(noteGain);
-  unisonOscs.push(osc);
-}
+  for (let i = -Math.floor(harmonicsCount / 2); i <= Math.floor(harmonicsCount / 2); i++) {
+    if (harmonicsCount % 2 === 0 && i === 0) continue; // evita duplicar el central en números pares
+    detuneOffsets.push(i * detuneStep);
+  }
 
-// Reemplazá también en pressedKeys:
-pressedKeys[key] = { unisonOscs, noteGain, releaseTime: release };
+  for (let detune of detuneOffsets) {
+    const osc = createOsc(freq);
+    const oscGain = ctx.createGain();
+    osc.detune.value = detune;
+    oscGain.gain.setValueAtTime(1 / detuneOffsets.length, now);
+    osc.connect(oscGain).connect(noteGain);
+    osc.start(now);
+    unisonOscs.push(osc);
+  }
 
-// Y en stopNote:
-const { unisonOscs, noteGain, releaseTime } = pressedKeys[key];
-...
-unisonOscs.forEach(osc => osc.stop(now + releaseTime));
-
-
-  // Ataque y Decay para subir y bajar volumen hasta sustain
+  // Envolvente ADSR
   noteGain.gain.linearRampToValueAtTime(volume, now + attack);
   noteGain.gain.linearRampToValueAtTime(volume * sustain, now + attack + decay);
 
-  fundamentalOsc.start();
-  harmonicOscs.forEach(h => h.osc.start());
-
-  // Ya no paramos los osciladores aquí, los paramos en stopNote con release
-
-  pressedKeys[key] = { fundamentalOsc, harmonicOscs, noteGain, releaseTime: release };
+  // Guardar info para detener después
+  pressedKeys[key] = { unisonOscs, noteGain, releaseTime: release };
 }
-
 function stopNote(key) {
   if (!pressedKeys[key]) return;
-  const { fundamentalOsc, harmonicOscs, noteGain, releaseTime } = pressedKeys[key];
+  const { unisonOscs, noteGain, releaseTime } = pressedKeys[key];
   const now = ctx.currentTime;
 
-  // Cancelamos animaciones previas y hacemos release suave
   noteGain.gain.cancelScheduledValues(now);
   noteGain.gain.setValueAtTime(noteGain.gain.value, now);
   noteGain.gain.linearRampToValueAtTime(0, now + releaseTime);
 
-  // Detenemos osciladores después del release
-  fundamentalOsc.stop(now + releaseTime);
-  harmonicOscs.forEach(h => h.osc.stop(now + releaseTime));
+  unisonOscs.forEach(osc => osc.stop(now + releaseTime));
 
-  // Limpieza luego de que termine el release
   setTimeout(() => {
     noteGain.disconnect();
     delete pressedKeys[key];
   }, releaseTime * 1000 + 100);
 }
+
 
 
 function drawOscilloscope() {
