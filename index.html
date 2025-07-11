@@ -1,10 +1,9 @@
-<!DOCTYPE html>
+LO UNICO QUE TENES QUE AGREGAR AL CODIGO ES EL DETUNE UNISONE NADA MAS EL RESTO DEJALO COMO ESTA: <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <title>Sintetizador Web Corregido</title>
+  <meta charset="UTF-8">
+  <title>Sintetizador Web</title>
   <style>
-    /* Mantengo tu CSS sin cambios */
     body {
       background: #111;
       color: #eee;
@@ -106,59 +105,63 @@
       transform-origin: bottom center;
       transform: rotate(0deg);
     }
-
+    
     .wave-btn,#transposeDown,#transposeUp {
       width: 60px;
       height: 60px;
       background-color: black;
-      background-size: contain;
-      background-position: center;
-      background-repeat: no-repeat;
-      border: none;
-      cursor: pointer;
+      background-size: contain;       /* Ajusta la imagen para cubrir todo el botón */
+      background-position: center;  /* Centra la imagen */
+      background-repeat: no-repeat; /* Evita que se repita la imagen */
+      border: none;                 /* Opcional: quita borde si es botón */
+      cursor: pointer;             /* Opcional: estilo de cursor */
     }
+
 
     .wave-btn.selected {
-      box-shadow: 0 0 0 5px rgba(255, 255, 0, 0.3);
-      outline: 2px solid rgba(255, 255, 0, 0.5);
-      border-radius: 8px;
-    }
-    button.transpose-highlight {
-      box-shadow: 0 0 0 5px rgba(255, 255, 0, 0.3);
-      outline: 2px solid rgba(255, 255, 0, 0.5);
-      border-radius: 6px;
-    }
+  box-shadow: 0 0 0 5px rgba(255, 255, 0, 0.3); /* borde amarillo semitransparente */
+  outline: 2px solid rgba(255, 255, 0, 0.5); /* opcional: borde más definido */
+  border-radius: 8px;
+}
+button.transpose-highlight {
+  box-shadow: 0 0 0 5px rgba(255, 255, 0, 0.3);
+  outline: 2px solid rgba(255, 255, 0, 0.5);
+  border-radius: 6px;
+}
 
-    .TECLADO {
-      top: 70px;
-      left: 43px;
-      position: absolute;
-      width: 980px;
-      height: 300px;
-      display: flex;
-      flex-direction: row;
-      align-items: flex-start;
-      position: relative;
-    }
 
-    .TECLAS_BLANCAS {
-      top:-10px;
-      background: white;
-      width: 60px;
-      height: 200px;
-      margin: 2px;
-      border-radius: 0 0 10px 10px;
-      z-index: 1;
-    }
+ .TECLADO {
+  top: 70px;
+  left: 43px;
+  position: absolute;
+  width: 980px;
+  height: 300px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  position: relative; /* importante para posicionar teclas negras */
+}
 
-    .TECLAS_NEGRAS {
-      position: absolute;
-      background: black;
-      width: 40px;
-      height: 120px;
-      z-index: 2;
-      border-radius: 0 0 5px 5px;
-    }
+.TECLAS_BLANCAS {
+  top:-10px;
+  background: white;
+  width: 60px;
+  height: 200px;
+  margin: 2px;
+  border-radius: 0 0 10px 10px;
+  z-index: 1;
+}
+
+.TECLAS_NEGRAS {
+  position: absolute;
+  background: black;
+  width: 40px;
+  height: 120px;
+  z-index: 2;
+  border-radius: 0 0 5px 5px;
+}
+
+
 
     canvas {
       position: absolute;
@@ -176,30 +179,30 @@
     <div class="recuadro_Principal"></div>
     <div class="controls">
 
-      <div class="control" style="left: 0px;">
-        <div id="waveButtons" style="display:flex; flex-direction: grid; gap: 6px; margin-top:90px; margin-left: 220px;">
-          <button class="wave-btn selected" data-wave="sine" style="background-image: url('BOTON VIBE SENO.png');"></button>
-          <button class="wave-btn" data-wave="square" style="background-image: url('BOTON VIBE CUADRADO.png');"></button>
-          <button class="wave-btn" data-wave="sawtooth" style="background-image: url('BOTON VIBE SIERRA.png');"></button>
-          <button class="wave-btn" data-wave="triangle" style="background-image: url('BOTON VIBE TRIANGULO.png');"></button>
-          <button class="wave-btn" data-wave="white" style="background-image: url('BOTON VIBE RUIDO BLANCO.png');"></button>
+<div class="control" style="left: 0px;">
+  <div id="waveButtons" style="display:flex; flex-direction: grid; gap: 6px; margin-top:90px; margin-left: 220px;">
+    <button class="wave-btn" data-wave="sine" style="background-image: url('BOTON VIBE SENO.png');"></button>
+    <button class="wave-btn" data-wave="square"style="background-image: url('BOTON VIBE CUADRADO.png');"></button>
+    <button class="wave-btn" data-wave="sawtooth" style="background-image: url('BOTON VIBE SIERRA.png');"></button>
+    <button class="wave-btn" data-wave="triangle" style="background-image: url('BOTON VIBE TRIANGULO.png');"></button>
+    <button class="wave-btn" data-wave="white" style="background-image: url('BOTON VIBE RUIDO BLANCO.png');"></button>
 
-          <!-- NUEVO: botón Custom -->
-          <button class="wave-btn" id="customWaveBtn" data-wave="custom" style="background-image: url('BOTON VIBE RUIDO BLANCO.png');"></button>
-          <input type="file" id="customFile" accept=".wav,.mp3,.ogg" style="display:none">
-        </div>
-      </div>
-
-      <div class="control" style="top:-50px; left: 420px;">
-        <div class="knob" id="harmonicsKnob">
-          <div class="knob-marker" id="harmonicsMarker"></div>
-        </div>
-        <span id="harmonicsVal" style="color:#429869;">0</span>
-      </div>
+    <!-- NUEVO: botón Custom -->
+    <button class="wave-btn" id="customWaveBtn" data-wave="custom" style="background-image: url('BOTON VIBE RUIDO BLANCO.png');"></button>
+    <input type="file" id="customFile" accept=".wav,.mp3,.ogg" style="display:none">
+  </div>
+</div>
+<!-- Control tipo potenciómetro para Armónicos -->
+<div class="control" style="top:-50px; left: 420px;">
+  <div class="knob" id="harmonicsKnob">
+    <div class="knob-marker" id="harmonicsMarker"></div>
+  </div>
+  <span id="harmonicsVal"style="color:#429869;">0</span>
+</div>
 
       <div class="control" style="top: 80px; left: 0px;">
         <div style="display: flex; flex-direction: column; gap: 6px; align-items: center;">
-          <div style="display: flex; flex-direction: row; gap: 6px; align-items: center;">
+          <div style="display: flex; flex-direction: row; gap: 6px;align-items: center;">
             <button id="transposeDown" style="background-image: url('+ OCTV.png');"></button>
             <button id="transposeUp" style="background-image: url('- OCTV.png');"></button>
           </div>
@@ -211,6 +214,11 @@
         <input type="range" id="volume" min="0" max="1" step="0.01" value="0.5">
         <span id="volumeVal">0.50</span>
       </div>
+<!-- Slider de detune -->
+<div class="control" style="top:-10px; left: 330px;">
+  <input type="range" id="detune" min="-100" max="100" step="1" value="0">
+  <span id="detuneVal">0</span>
+</div>
 
       <!-- Potenciómetros -->
       <div class="control" style="top:-50px; left: 500px;">
@@ -248,334 +256,371 @@
         <span id="distortionVal" style="color:#429869;">0</span>
       </div>
 
+
+
       <canvas id="oscilloscope" width="500" height="50"></canvas>
 
     </div>
+  
+<div class="TECLADO">
+  <!-- Teclas blancas -->
+  <div class="TECLAS_BLANCAS"></div> <!-- C -->
+  <div class="TECLAS_BLANCAS"></div> <!-- D -->
+  <div class="TECLAS_BLANCAS"></div> <!-- E -->
+  <div class="TECLAS_BLANCAS"></div> <!-- F -->
+  <div class="TECLAS_BLANCAS"></div> <!-- G -->
+  <div class="TECLAS_BLANCAS"></div> <!-- A -->
+  <div class="TECLAS_BLANCAS"></div> <!-- B -->
+  <div class="TECLAS_BLANCAS"></div> <!-- C -->
+  <div class="TECLAS_BLANCAS"></div> <!-- D -->
+  <div class="TECLAS_BLANCAS"></div> <!-- E -->
+  <div class="TECLAS_BLANCAS"></div> <!-- F -->
+  <div class="TECLAS_BLANCAS"></div> <!-- G -->
+  <div class="TECLAS_BLANCAS"></div> <!-- A -->
+  <div class="TECLAS_BLANCAS"></div> <!-- B -->
 
-    <div class="TECLADO">
-      <!-- Teclas blancas -->
-      <div class="TECLAS_BLANCAS"></div> <!-- C -->
-      <div class="TECLAS_BLANCAS"></div> <!-- D -->
-      <div class="TECLAS_BLANCAS"></div> <!-- E -->
-      <div class="TECLAS_BLANCAS"></div> <!-- F -->
-      <div class="TECLAS_BLANCAS"></div> <!-- G -->
-      <div class="TECLAS_BLANCAS"></div> <!-- A -->
-      <div class="TECLAS_BLANCAS"></div> <!-- B -->
-      <div class="TECLAS_BLANCAS"></div> <!-- C -->
-      <div class="TECLAS_BLANCAS"></div> <!-- D -->
-      <div class="TECLAS_BLANCAS"></div> <!-- E -->
-      <div class="TECLAS_BLANCAS"></div> <!-- F -->
-      <div class="TECLAS_BLANCAS"></div> <!-- G -->
-      <div class="TECLAS_BLANCAS"></div> <!-- A -->
-      <div class="TECLAS_BLANCAS"></div> <!-- B -->
+  <!-- Teclas negras posicionadas a mano -->
+  <div class="TECLAS_NEGRAS" style="left: 45px;"></div>   <!-- C# -->
+  <div class="TECLAS_NEGRAS" style="left: 107px;"></div>  <!-- D# -->
+  <!-- NO hay tecla negra entre E y F -->
+  <div class="TECLAS_NEGRAS" style="left: 231px;"></div>  <!-- F# -->
+  <div class="TECLAS_NEGRAS" style="left: 295px;"></div>  <!-- G# -->
+  <div class="TECLAS_NEGRAS" style="left: 360px;"></div>  <!-- A# -->
+  <!-- NO hay tecla negra entre B y C -->
+  <div class="TECLAS_NEGRAS" style="left: 485px;"></div>  <!-- C# -->
+  <div class="TECLAS_NEGRAS" style="left: 550px;"></div>  <!-- D# -->
+  <!-- NO E# -->
+  <div class="TECLAS_NEGRAS" style="left: 675px;"></div>  <!-- F# -->
+  <div class="TECLAS_NEGRAS" style="left: 740px;"></div>  <!-- G# -->
+  <div class="TECLAS_NEGRAS" style="left: 800px;"></div>  <!-- A# -->
+</div>
 
-      <!-- Teclas negras posicionadas a mano -->
-      <div class="TECLAS_NEGRAS" style="left: 45px;"></div>   <!-- C# -->
-      <div class="TECLAS_NEGRAS" style="left: 107px;"></div>  <!-- D# -->
-      <!-- NO hay tecla negra entre E y F -->
-      <div class="TECLAS_NEGRAS" style="left: 231px;"></div>  <!-- F# -->
-      <div class="TECLAS_NEGRAS" style="left: 295px;"></div>  <!-- G# -->
-      <div class="TECLAS_NEGRAS" style="left: 360px;"></div>  <!-- A# -->
-      <!-- NO hay tecla negra entre B y C -->
-      <div class="TECLAS_NEGRAS" style="left: 485px;"></div>  <!-- C# -->
-      <div class="TECLAS_NEGRAS" style="left: 550px;"></div>  <!-- D# -->
-      <!-- NO E# -->
-      <div class="TECLAS_NEGRAS" style="left: 675px;"></div>  <!-- F# -->
-      <div class="TECLAS_NEGRAS" style="left: 740px;"></div>  <!-- G# -->
-      <div class="TECLAS_NEGRAS" style="left: 800px;"></div>  <!-- A# -->
-    </div>
+</div>
+<script>
+const ctx = new (window.AudioContext || window.webkitAudioContext)();
+const analyser = ctx.createAnalyser();
+analyser.fftSize = 2048;
+const dataArray = new Uint8Array(analyser.fftSize);
+const canvas = document.getElementById("oscilloscope");
+const canvasCtx = canvas.getContext("2d");
 
-  </div>
+const keys = "asdfghjklxcvbnqwertyuiop";
 
-  <script>
-    const ctx = new (window.AudioContext || window.webkitAudioContext)();
-    const analyser = ctx.createAnalyser();
-    analyser.fftSize = 1024;
-    const bufferLength = analyser.frequencyBinCount;
-    const dataArray = new Uint8Array(bufferLength);
+const keyToFreq = {
+  a: 261.63, q: 277.18, s: 293.66, w: 311.13,
+  d: 329.63, f: 349.23, e: 369.99, g: 392.00,
+  r: 415.30, h: 440.00, t: 466.16, j: 493.88,
+  k: 523.25, y: 554.37, l: 587.33, u: 622.25,
+  x: 659.25, c: 698.46, i: 739.99, v: 783.99,
+  o: 830.61, b: 880.00, p: 932.33, n: 987.77
+};
 
-    const canvas = document.getElementById('oscilloscope');
-    const canvasCtx = canvas.getContext('2d');
+let selectedWave = "sine";
+let customBuffer = null;
+let transpose = 0;
+const pressedKeys = {};
 
-    // Variables globales
-    let baseNoteFrequency = 261.63; // frecuencia de C4
-    let transpose = 0;
-    let selectedWave = 'sine';
-
-    // Knobs valores default
-    let attackVal = 0.05;
-    let decayVal = 0.3;
-    let sustainVal = 0.7;
-    let releaseVal = 0.5;
-    let volumeVal = 0.5;
-    let distortionVal = 0;
-    let delayVal = 0.2;
-    let filterVal = 5000;
-    let harmonicsVal = 0;
-
-    // Mapa teclas a frecuencias (octava 4)
-    const keyToFreq = {
-      a: 261.63, // C4
-      w: 277.18, // C#4
-      s: 293.66, // D4
-      e: 311.13, // D#4
-      d: 329.63, // E4
-      f: 349.23, // F4
-      t: 369.99, // F#4
-      g: 392.00, // G4
-      y: 415.30, // G#4
-      h: 440.00, // A4
-      u: 466.16, // A#4
-      j: 493.88, // B4
-      k: 523.25, // C5
-      o: 554.37, // C#5
-      l: 587.33, // D5
-      p: 622.25, // D#5
-      ñ: 659.26  // E5 (si tienes ñ)
-    };
-
-    // Guardamos los osciladores y ganancia para cada tecla
-    const activeNotes = {};
-
-    // Nodo master volumen
-    const masterGain = ctx.createGain();
-    masterGain.gain.value = volumeVal;
-    masterGain.connect(analyser);
-    analyser.connect(ctx.destination);
-
-    // Nodo filtro pasa bajos
-    const filterNode = ctx.createBiquadFilter();
-    filterNode.type = 'lowpass';
-    filterNode.frequency.value = filterVal;
-    filterNode.connect(masterGain);
-
-    // Nodo delay
-    const delayNode = ctx.createDelay();
-    delayNode.delayTime.value = delayVal;
-    delayNode.connect(filterNode);
-
-    // Nodo distorsión
-    const distortionNode = ctx.createWaveShaper();
-    function makeDistortionCurve(amount) {
-      let k = amount;
-      let n_samples = 44100;
-      let curve = new Float32Array(n_samples);
-      let deg = Math.PI / 180;
-      for (let i = 0; i < n_samples; ++i) {
-        let x = i * 2 / n_samples - 1;
-        curve[i] = (3 + k) * x * 20 * deg / (Math.PI + k * Math.abs(x));
-      }
-      return curve;
-    }
-    distortionNode.curve = makeDistortionCurve(distortionVal);
-    distortionNode.oversample = '4x';
-
-    // Conectar cadena de audio: oscilador -> distortion -> delay -> filter -> masterGain -> analyser -> destino
-    distortionNode.connect(delayNode);
-
-    // El destino del oscilador se conecta al nodo de distorsión
-    // Y después la cadena sigue hacia delayNode y así sucesivamente
-
-    // Variables para ruido blanco
-    const noiseBuffer = ctx.createBuffer(1, ctx.sampleRate * 2, ctx.sampleRate);
-    const output = noiseBuffer.getChannelData(0);
-    for (let i = 0; i < noiseBuffer.length; i++) {
-      output[i] = Math.random() * 2 - 1;
-    }
-
-    // Función para crear oscilador o ruido blanco
-    function createSource(freq) {
-      if (selectedWave === 'white') {
-        const noiseSource = ctx.createBufferSource();
-        noiseSource.buffer = noiseBuffer;
-        noiseSource.loop = true;
-        return noiseSource;
-      } else if (selectedWave === 'custom' && customBuffer) {
-        const bufferSource = ctx.createBufferSource();
-        bufferSource.buffer = customBuffer;
-        bufferSource.loop = true;
-        return bufferSource;
-      } else {
-        const osc = ctx.createOscillator();
-        osc.type = selectedWave;
-        osc.frequency.value = freq;
-        return osc;
-      }
-    }
-
-    // Variable para onda custom cargada
-    let customBuffer = null;
-
-    // Cargar archivo custom
-    const customFileInput = document.getElementById('customFile');
-    document.getElementById('customWaveBtn').addEventListener('click', () => {
-      customFileInput.click();
+// Manejador general para botones (menos el Custom)
+document.querySelectorAll(".wave-btn").forEach(btn => {
+  if (btn.id !== "customWaveBtn") {
+    btn.addEventListener("click", () => {
+      selectedWave = btn.dataset.wave;
+      document.querySelectorAll(".wave-btn").forEach(b => b.classList.remove("selected"));
+      btn.classList.add("selected");
     });
-    customFileInput.addEventListener('change', e => {
-      const file = e.target.files[0];
-      if (!file) return;
-      const reader = new FileReader();
-      reader.onload = function(ev) {
-        ctx.decodeAudioData(ev.target.result).then(buffer => {
-          customBuffer = buffer;
-          selectedWave = 'custom';
-          document.querySelectorAll('.wave-btn').forEach(btn => btn.classList.remove('selected'));
-          document.getElementById('customWaveBtn').classList.add('selected');
-        }).catch(console.error);
-      };
-      reader.readAsArrayBuffer(file);
-    });
+  }
+});
 
-    // Función para tocar nota
-    function playNote(key) {
-      if (activeNotes[key]) return; // ya suena
 
-      if (!(key in keyToFreq)) return;
+// CLIC simple → Seleccionar si ya está cargado
+document.getElementById("customWaveBtn").addEventListener("click", () => {
+  if (customBuffer) {
+    selectedWave = "custom";
+    document.querySelectorAll(".wave-btn").forEach(b => b.classList.remove("selected"));
+    document.getElementById("customWaveBtn").classList.add("selected");
+    console.log("🎵 Onda custom seleccionada.");
+  } else {
+    console.log("⚠️ Aún no se cargó ninguna onda personalizada.");
+  }
+});
 
-      if (ctx.state === 'suspended') {
-        ctx.resume();
-      }
+// DOBLE CLIC → Permitir volver a cargar archivo
+document.getElementById("customWaveBtn").addEventListener("dblclick", () => {
+  document.getElementById("customFile").click();
+});
 
-      let freq = keyToFreq[key] * Math.pow(2, transpose / 12);
-
-      // Crear fuente
-      const source = createSource(freq);
-
-      // Crear nodo ganancia con ADSR
-      const gainNode = ctx.createGain();
-      gainNode.gain.setValueAtTime(0, ctx.currentTime);
-
-      // Conectar fuente -> distorsionNode (que luego se conecta a delay, filtro y master)
-      source.connect(distortionNode);
-
-      // Conectar ganancia a la cadena después de distorsión para controlar volumen ADSR individual
-      // Aquí lo que hacemos es: Fuente -> Distorsión -> Delay -> Filtro -> MasterGain
-      // Pero el control de volumen ADSR lo hacemos justo antes del masterGain, necesitamos ajustar.
-
-      // Pero el nodo distortionNode está conectado a delayNode, luego a filterNode y masterGain.
-      // Para aplicar ADSR a la nota individual, tenemos que colocar el gainNode antes de distorsión o justo después del oscilador.
-
-      // Para que funcione bien, vamos a conectar:
-      // Fuente -> Ganancia ADSR -> distorsión -> delay -> filtro -> masterGain
-
-      source.disconnect();
-      source.connect(gainNode);
-      gainNode.connect(distortionNode);
-
-      source.start();
-
-      const now = ctx.currentTime;
-
-      // ADSR
-      gainNode.gain.cancelScheduledValues(now);
-      gainNode.gain.setValueAtTime(0, now);
-      gainNode.gain.linearRampToValueAtTime(volumeVal, now + attackVal);
-      gainNode.gain.linearRampToValueAtTime(volumeVal * sustainVal, now + attackVal + decayVal);
-
-      activeNotes[key] = { source, gainNode };
-    }
-
-    // Función para parar nota
-    function stopNote(key) {
-      if (!activeNotes[key]) return;
-      const { source, gainNode } = activeNotes[key];
-      const now = ctx.currentTime;
-
-      gainNode.gain.cancelScheduledValues(now);
-      gainNode.gain.setValueAtTime(gainNode.gain.value, now);
-      gainNode.gain.linearRampToValueAtTime(0, now + releaseVal);
-
-      source.stop(now + releaseVal + 0.05);
-
-      setTimeout(() => {
-        source.disconnect();
-        gainNode.disconnect();
-        delete activeNotes[key];
-      }, (releaseVal + 0.1) * 1000);
-    }
-
-    // Eventos teclas
-    document.addEventListener('keydown', e => {
-      if (e.repeat) return;
-      const key = e.key.toLowerCase();
-      playNote(key);
-    });
-
-    document.addEventListener('keyup', e => {
-      const key = e.key.toLowerCase();
-      stopNote(key);
-    });
-
-    // Cambiar tipo de onda
-    document.querySelectorAll('.wave-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        selectedWave = btn.dataset.wave;
-        document.querySelectorAll('.wave-btn').forEach(b => b.classList.remove('selected'));
-        btn.classList.add('selected');
+// Cargar el archivo personalizado
+document.getElementById("customFile").addEventListener("change", function () {
+  const file = this.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = function (ev) {
+      ctx.decodeAudioData(ev.target.result, buffer => {
+        customBuffer = buffer;
+        selectedWave = "custom";
+        document.querySelectorAll(".wave-btn").forEach(b => b.style.background = "");
+        document.getElementById("customWaveBtn").style.background = "#0f0";
+        console.log("✔ Archivo custom cargado correctamente.");
+      }, err => {
+        console.error("❌ Error al decodificar audio:", err);
       });
-    });
+    };
+    reader.readAsArrayBuffer(file);
+  }
+});
 
-    // Control volumen
-    document.getElementById('volume').addEventListener('input', e => {
-      volumeVal = parseFloat(e.target.value);
-      masterGain.gain.value = volumeVal;
-      document.getElementById('volumeVal').textContent = volumeVal.toFixed(2);
-    });
 
-    // Transposición botones
-    document.getElementById('transposeUp').addEventListener('click', () => {
-      transpose++;
-      if (transpose > 24) transpose = 24;
-    });
-    document.getElementById('transposeDown').addEventListener('click', () => {
-      transpose--;
-      if (transpose < -24) transpose = -24;
-    });
+function createWaveform(type) {
+  const real = new Float32Array(9);
+  const imag = new Float32Array(9);
+  return ctx.createPeriodicWave(real, imag);
+}
 
-    // ADSR knobs simulados con sliders para simplificar (puedes adaptar)
-    // Aquí simplifico para que puedas controlar con los sliders de arriba
+function makeDistortionCurve(amount) {
+  const n = 44100, curve = new Float32Array(n), deg = Math.PI / 180;
+  for (let i = 0; i < n; ++i) {
+    const x = (i * 2) / n - 1;
+    curve[i] = ((3 + amount) * x * 20 * deg) / (Math.PI + amount * Math.abs(x));
+  }
+  return curve;
+}
 
-    // Actualizar ADSR
-    function updateADSR() {
-      attackVal = parseFloat(document.getElementById('attackVal').textContent) || 0.05;
-      decayVal = parseFloat(document.getElementById('decayVal').textContent) || 0.3;
-      sustainVal = parseFloat(document.getElementById('sustainVal').textContent) || 0.7;
-      releaseVal = parseFloat(document.getElementById('releaseVal').textContent) || 0.5;
+function createOsc(freqToUse) {
+  let osc;
+  const now = ctx.currentTime;
+
+  if (selectedWave === "custom" && customBuffer) {
+    osc = ctx.createBufferSource();
+    osc.buffer = customBuffer;
+    osc.playbackRate.setValueAtTime(freqToUse / 440, now);
+    osc.loop = true;
+  } else if (selectedWave === "white") {
+    osc = ctx.createBufferSource();
+    const buffer = ctx.createBuffer(1, 44100, ctx.sampleRate);
+    const data = buffer.getChannelData(0);
+    for (let i = 0; i < 44100; i++) {
+      data[i] = Math.random() * 2 - 1;
     }
+    osc.buffer = buffer;
+    osc.loop = true;
+  }  else {
+    osc = ctx.createOscillator();
+    osc.frequency.setValueAtTime(freqToUse, now);
+    osc.type = selectedWave;
+  }
 
-    // Para que funcione el visualizador
-    function draw() {
-      requestAnimationFrame(draw);
-      analyser.getByteTimeDomainData(dataArray);
+  return osc;
+}
 
-      canvasCtx.fillStyle = 'black';
-      canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
+function playNote(key) {
+  function playNote(key) {
+  if (pressedKeys[key]) return;
+  const freq = keyToFreq[key] * Math.pow(2, transpose / 12);
+  const volume = parseFloat(document.getElementById("volume").value);
+  const attack = getAttack();
+  const decay = getDecay();
+  const sustain = getSustain();
+  const release = getRelease();
+  const filterFreq = getFilter();
+  const delayTime = getDelay();
+  const distortionAmount = getDistortion();
+  const harmonicsCount = parseInt(getHarmonics());
+  const now = ctx.currentTime;
 
-      canvasCtx.lineWidth = 2;
-      canvasCtx.strokeStyle = '#0f0';
+  const detuneValue = parseFloat(detuneSlider.value); // aquí usamos el slider detune
 
-      canvasCtx.beginPath();
+  const noteGain = ctx.createGain();
+  noteGain.gain.setValueAtTime(0, now);
 
-      const sliceWidth = canvas.width / bufferLength;
-      let x = 0;
+  // ... (filtros, delay, distorsion setup)
 
-      for (let i = 0; i < bufferLength; i++) {
-        let v = dataArray[i] / 128.0;
-        let y = v * canvas.height / 2;
-        if (i === 0) {
-          canvasCtx.moveTo(x, y);
-        } else {
-          canvasCtx.lineTo(x, y);
-        }
-        x += sliceWidth;
-      }
+  const fundamentalOsc = createOsc(freq);
+  fundamentalOsc.detune.setValueAtTime(detuneValue, now);  // <-- agrego detune
+  const fundamentalGain = ctx.createGain();
+  fundamentalGain.gain.setValueAtTime(1, now);
+  fundamentalOsc.connect(fundamentalGain).connect(noteGain);
 
-      canvasCtx.lineTo(canvas.width, canvas.height / 2);
-      canvasCtx.stroke();
-    }
+  const harmonicOscs = [];
+  for (let i = 1; i <= harmonicsCount; i++) {
+    const hFreq = freq * (i + 1);
+    const hOsc = createOsc(hFreq);
+    hOsc.detune.setValueAtTime(detuneValue, now);  // <-- agrego detune aquí también
+    const hGain = ctx.createGain();
+    hGain.gain.setValueAtTime(1 / (i + 1), now);
+    hOsc.connect(hGain).connect(noteGain);
+    harmonicOscs.push({ osc: hOsc, gain: hGain });
+  }
 
-    draw();
+  // Ataque y Decay para subir y bajar volumen hasta sustain
+  noteGain.gain.linearRampToValueAtTime(volume, now + attack);
+  noteGain.gain.linearRampToValueAtTime(volume * sustain, now + attack + decay);
 
-  </script>
+  fundamentalOsc.start();
+  harmonicOscs.forEach(h => h.osc.start());
+
+  // Ya no paramos los osciladores aquí, los paramos en stopNote con release
+
+  pressedKeys[key] = { fundamentalOsc, harmonicOscs, noteGain, releaseTime: release };
+
+}
+
+function stopNote(key) {
+  if (!pressedKeys[key]) return;
+  const { fundamentalOsc, harmonicOscs, noteGain, releaseTime } = pressedKeys[key];
+  const now = ctx.currentTime;
+
+  // Cancelamos animaciones previas y hacemos release suave
+  noteGain.gain.cancelScheduledValues(now);
+  noteGain.gain.setValueAtTime(noteGain.gain.value, now);
+  noteGain.gain.linearRampToValueAtTime(0, now + releaseTime);
+
+  // Detenemos osciladores después del release
+  fundamentalOsc.stop(now + releaseTime);
+  harmonicOscs.forEach(h => h.osc.stop(now + releaseTime));
+
+  // Limpieza luego de que termine el release
+  setTimeout(() => {
+    noteGain.disconnect();
+    delete pressedKeys[key];
+  }, releaseTime * 1000 + 100);
+}
+
+
+function drawOscilloscope() {
+  requestAnimationFrame(drawOscilloscope);
+  analyser.getByteTimeDomainData(dataArray);
+  canvasCtx.fillStyle = "#000";
+  canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
+  canvasCtx.lineWidth = 2;
+  canvasCtx.strokeStyle = "#0edfe3";
+  canvasCtx.beginPath();
+  const sliceWidth = canvas.width / analyser.fftSize;
+  let x = 0;
+  for (let i = 0; i < analyser.fftSize; i++) {
+    const v = dataArray[i] / 128.0;
+    const y = v * canvas.height / 2;
+    i === 0 ? canvasCtx.moveTo(x, y) : canvasCtx.lineTo(x, y);
+    x += sliceWidth;
+  }
+  canvasCtx.lineTo(canvas.width, canvas.height / 2);
+  canvasCtx.stroke();
+}
+drawOscilloscope();
+
+document.addEventListener("keydown", e => {
+  const key = e.key.toLowerCase();
+  if (keys.includes(key)) playNote(key);
+  else if (key === '2') playSnare();
+});
+document.addEventListener("keyup", e => {
+  const key = e.key.toLowerCase();
+  if (keys.includes(key)) stopNote(key);
+});
+
+document.getElementById("transposeUp").addEventListener("click", () => {
+  transpose = Math.min(transpose + 12, 24);
+  updateTransposeHighlight();
+});
+
+document.getElementById("transposeDown").addEventListener("click", () => {
+  transpose = Math.max(transpose - 12, -24);
+  updateTransposeHighlight();
+});
+
+function updateTransposeHighlight() {
+  const upBtn = document.getElementById("transposeUp");
+  const downBtn = document.getElementById("transposeDown");
+
+  upBtn.classList.remove("transpose-highlight");
+  downBtn.classList.remove("transpose-highlight");
+
+  if (transpose > 0) {
+    upBtn.classList.add("transpose-highlight");
+  } else if (transpose < 0) {
+    downBtn.classList.add("transpose-highlight");
+  }
+}
+
+
+function createKnob(id, markerId, min, max, initial, step, displayId) {
+  let value = initial;
+  let isDragging = false;
+  const knob = document.getElementById(id);
+  const marker = document.getElementById(markerId);
+  const display = document.getElementById(displayId);
+
+  function updateMarker() {
+    const angle = (value - min) / (max - min) * 270 - 135;
+    marker.style.transform = rotate(${angle}deg);
+    display.textContent = value.toFixed(1);
+  }
+
+  function setValueFromDelta(deltaY) {
+    value -= deltaY * step;
+    value = Math.max(min, Math.min(max, value));
+    updateMarker();
+  }
+
+  knob.addEventListener("mousedown", () => isDragging = true);
+  document.addEventListener("mouseup", () => isDragging = false);
+  document.addEventListener("mousemove", e => {
+    if (isDragging) setValueFromDelta(e.movementY);
+  });
+
+  updateMarker();
+  return () => value;
+}
+
+function playSnare() {
+  const now = ctx.currentTime;
+  const noiseBuffer = ctx.createBuffer(1, ctx.sampleRate * 1, ctx.sampleRate);
+  const output = noiseBuffer.getChannelData(0);
+  for (let i = 0; i < noiseBuffer.length; i++) {
+    output[i] = Math.random() * 2 - 1;
+  }
+  const noise = ctx.createBufferSource();
+  noise.buffer = noiseBuffer;
+
+  const noiseFilter = ctx.createBiquadFilter();
+  noiseFilter.type = "highpass";
+  noiseFilter.frequency.setValueAtTime(1000, now);
+
+  const noiseGain = ctx.createGain();
+  noiseGain.gain.setValueAtTime(1, now);
+  noiseGain.gain.exponentialRampToValueAtTime(0.01, now + 0.2);
+
+  noise.connect(noiseFilter).connect(noiseGain).connect(ctx.destination);
+  noise.start(now);
+  noise.stop(now + 0.2);
+
+  const osc = ctx.createOscillator();
+  osc.type = "triangle";
+  osc.frequency.setValueAtTime(200, now);
+  const oscGain = ctx.createGain();
+  oscGain.gain.setValueAtTime(0.7, now);
+  oscGain.gain.exponentialRampToValueAtTime(0.01, now + 0.1);
+  osc.connect(oscGain).connect(ctx.destination);
+  osc.start(now);
+  osc.stop(now + 0.2);
+}
+
+const getAttack = createKnob("attackKnob", "attackMarker", 0, 1, 0, 0.01, "attackVal");
+const getDecay = createKnob("decayKnob", "decayMarker", 0, 2, 0, 0.01, "decayVal");
+const getSustain = createKnob("sustainKnob", "sustainMarker", 0, 10, 5, 0.1, "sustainVal");
+const getRelease = createKnob("releaseKnob", "releaseMarker", 0, 10, 0.5, 0.1, "releaseVal");
+const getFilter = createKnob("filterKnob", "filterMarker", 200, 10000, 5000, 50, "filterVal");
+const getDelay = createKnob("delayKnob", "delayMarker", 0, 1, 0, 0.01, "delayVal");
+const getDistortion = createKnob("distortionKnob", "distortionMarker", 0, 400, 0, 5, "distortionVal");
+const getHarmonics = createKnob("harmonicsKnob", "harmonicsMarker", 0, 5, 0, 1, "harmonicsVal");
+  const detuneSlider = document.getElementById("detune");
+const detuneValSpan = document.getElementById("detuneVal");
+
+detuneSlider.addEventListener("input", () => {
+  detuneValSpan.textContent = detuneSlider.value;
+});
+
+
+</script>
+
 </body>
 </html>
