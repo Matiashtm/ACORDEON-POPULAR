@@ -2,26 +2,39 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Onda Seno Básica</title>
+  <title>Onda con Detune</title>
 </head>
 <body>
-  <button onclick="playTone()">▶️ Reproducir tono</button>
+  <button onclick="playDetuned()">▶️ Reproducir con Detune</button>
+
   <script>
-    function playTone() {
+    function playDetuned() {
       const ctx = new (window.AudioContext || window.webkitAudioContext)();
-      const osc = ctx.createOscillator();      // 1. Crear oscilador
-      const gain = ctx.createGain();           // 2. Crear control de volumen
 
-      osc.type = "sine";                       // 3. Tipo de onda (sine, square, sawtooth, triangle)
-      osc.frequency.setValueAtTime(440, ctx.currentTime); // 4. Frecuencia en Hz
+      // Oscilador 1: normal
+      const osc1 = ctx.createOscillator();
+      const gain1 = ctx.createGain();
+      osc1.type = "sine";
+      osc1.frequency.setValueAtTime(440, ctx.currentTime); // A4 = 440 Hz
+      gain1.gain.setValueAtTime(0.2, ctx.currentTime);
 
-      osc.connect(gain);                       // 5. Conectar oscilador al gain
-      gain.connect(ctx.destination);           // 6. Conectar gain a la salida (altavoces)
+      // Oscilador 2: desafinado
+      const osc2 = ctx.createOscillator();
+      const gain2 = ctx.createGain();
+      osc2.type = "sine";
+      osc2.frequency.setValueAtTime(440, ctx.currentTime);
+      osc2.detune.setValueAtTime(10, ctx.currentTime); // Desafinado 10 cents (muy leve)
+      gain2.gain.setValueAtTime(0.2, ctx.currentTime);
 
-      gain.gain.setValueAtTime(0.2, ctx.currentTime); // 7. Volumen (de 0 a 1)
+      // Conexiones
+      osc1.connect(gain1).connect(ctx.destination);
+      osc2.connect(gain2).connect(ctx.destination);
 
-      osc.start();                             // 8. Iniciar sonido
-      osc.stop(ctx.currentTime + 1);           // 9. Detener luego de 1 segundo
+      // Reproducir
+      osc1.start();
+      osc2.start();
+      osc1.stop(ctx.currentTime + 2);
+      osc2.stop(ctx.currentTime + 2);
     }
   </script>
 </body>
